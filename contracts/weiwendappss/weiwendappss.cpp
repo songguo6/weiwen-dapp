@@ -146,7 +146,7 @@ private:
     uint64_t get_secondary_2() const { return to.value; }    
   };
 
-  typedef multi_index<"follow"_n, followtable, 
+  typedef multi_index<"followtable"_n, followtable, 
     indexed_by<"byfrom"_n, const_mem_fun<followtable, uint64_t, &followtable::get_secondary_1>>,
     indexed_by<"byto"_n, const_mem_fun<followtable, uint64_t, &followtable::get_secondary_2>>
   > follow_t;
