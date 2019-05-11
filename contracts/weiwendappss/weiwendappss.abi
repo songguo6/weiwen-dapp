@@ -1,0 +1,382 @@
+{
+    "____comment": "This file was generated with eosio-abigen. DO NOT EDIT ",
+    "version": "eosio::abi/1.1",
+    "types": [],
+    "structs": [
+        {
+            "name": "comment",
+            "base": "",
+            "fields": [
+                {
+                    "name": "author",
+                    "type": "name"
+                },
+                {
+                    "name": "content",
+                    "type": "string"
+                },
+                {
+                    "name": "post_id",
+                    "type": "uint64"
+                },
+                {
+                    "name": "pid",
+                    "type": "uint64"
+                },
+                {
+                    "name": "reply_to",
+                    "type": "name"
+                }
+            ]
+        },
+        {
+            "name": "commenttable",
+            "base": "",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "uint64"
+                },
+                {
+                    "name": "post_id",
+                    "type": "uint64"
+                },
+                {
+                    "name": "author",
+                    "type": "name"
+                },
+                {
+                    "name": "time",
+                    "type": "time_point_sec"
+                },
+                {
+                    "name": "balance",
+                    "type": "asset"
+                },
+                {
+                    "name": "like_num",
+                    "type": "uint32"
+                },
+                {
+                    "name": "pid",
+                    "type": "uint64"
+                },
+                {
+                    "name": "reply_to",
+                    "type": "name"
+                }
+            ]
+        },
+        {
+            "name": "deposit",
+            "base": "",
+            "fields": [
+                {
+                    "name": "account",
+                    "type": "name"
+                },
+                {
+                    "name": "quantity",
+                    "type": "asset"
+                }
+            ]
+        },
+        {
+            "name": "follow",
+            "base": "",
+            "fields": [
+                {
+                    "name": "from",
+                    "type": "name"
+                },
+                {
+                    "name": "to",
+                    "type": "name"
+                }
+            ]
+        },
+        {
+            "name": "followtable",
+            "base": "",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "uint64"
+                },
+                {
+                    "name": "from",
+                    "type": "name"
+                },
+                {
+                    "name": "to",
+                    "type": "name"
+                }
+            ]
+        },
+        {
+            "name": "like",
+            "base": "",
+            "fields": [
+                {
+                    "name": "author",
+                    "type": "name"
+                },
+                {
+                    "name": "type",
+                    "type": "uint32"
+                },
+                {
+                    "name": "type_id",
+                    "type": "uint64"
+                }
+            ]
+        },
+        {
+            "name": "liketable",
+            "base": "",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "uint64"
+                },
+                {
+                    "name": "type",
+                    "type": "uint32"
+                },
+                {
+                    "name": "type_id",
+                    "type": "uint64"
+                },
+                {
+                    "name": "author",
+                    "type": "name"
+                }
+            ]
+        },
+        {
+            "name": "post",
+            "base": "",
+            "fields": [
+                {
+                    "name": "author",
+                    "type": "name"
+                },
+                {
+                    "name": "content",
+                    "type": "string"
+                },
+                {
+                    "name": "attachtype",
+                    "type": "uint32"
+                },
+                {
+                    "name": "attachment",
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "name": "posttable",
+            "base": "",
+            "fields": [
+                {
+                    "name": "id",
+                    "type": "uint64"
+                },
+                {
+                    "name": "author",
+                    "type": "name"
+                },
+                {
+                    "name": "content",
+                    "type": "string"
+                },
+                {
+                    "name": "attachtype",
+                    "type": "uint32"
+                },
+                {
+                    "name": "attachment",
+                    "type": "string"
+                },
+                {
+                    "name": "time",
+                    "type": "time_point_sec"
+                },
+                {
+                    "name": "balance",
+                    "type": "asset"
+                },
+                {
+                    "name": "like_num",
+                    "type": "uint32"
+                },
+                {
+                    "name": "comment_num",
+                    "type": "uint32"
+                }
+            ]
+        },
+        {
+            "name": "reward",
+            "base": "",
+            "fields": [
+                {
+                    "name": "account",
+                    "type": "name"
+                }
+            ]
+        },
+        {
+            "name": "unfollow",
+            "base": "",
+            "fields": [
+                {
+                    "name": "from",
+                    "type": "name"
+                },
+                {
+                    "name": "to",
+                    "type": "name"
+                }
+            ]
+        },
+        {
+            "name": "usertable",
+            "base": "",
+            "fields": [
+                {
+                    "name": "account",
+                    "type": "name"
+                },
+                {
+                    "name": "balance",
+                    "type": "asset"
+                },
+                {
+                    "name": "follow_num",
+                    "type": "uint32"
+                },
+                {
+                    "name": "fans_num",
+                    "type": "uint32"
+                },
+                {
+                    "name": "post_num",
+                    "type": "uint32"
+                },
+                {
+                    "name": "like_num",
+                    "type": "uint32"
+                },
+                {
+                    "name": "last_reward_time",
+                    "type": "time_point_sec"
+                },
+                {
+                    "name": "last_like_time",
+                    "type": "time_point_sec"
+                },
+                {
+                    "name": "like_times",
+                    "type": "uint32"
+                }
+            ]
+        },
+        {
+            "name": "withdraw",
+            "base": "",
+            "fields": [
+                {
+                    "name": "account",
+                    "type": "name"
+                },
+                {
+                    "name": "quantity",
+                    "type": "asset"
+                }
+            ]
+        }
+    ],
+    "actions": [
+        {
+            "name": "comment",
+            "type": "comment",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "deposit",
+            "type": "deposit",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "follow",
+            "type": "follow",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "like",
+            "type": "like",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "post",
+            "type": "post",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "reward",
+            "type": "reward",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "unfollow",
+            "type": "unfollow",
+            "ricardian_contract": ""
+        },
+        {
+            "name": "withdraw",
+            "type": "withdraw",
+            "ricardian_contract": ""
+        }
+    ],
+    "tables": [
+        {
+            "name": "commenttable",
+            "type": "commenttable",
+            "index_type": "i64",
+            "key_names": [],
+            "key_types": []
+        },
+        {
+            "name": "followtable",
+            "type": "followtable",
+            "index_type": "i64",
+            "key_names": [],
+            "key_types": []
+        },
+        {
+            "name": "liketable",
+            "type": "liketable",
+            "index_type": "i64",
+            "key_names": [],
+            "key_types": []
+        },
+        {
+            "name": "posttable",
+            "type": "posttable",
+            "index_type": "i64",
+            "key_names": [],
+            "key_types": []
+        },
+        {
+            "name": "usertable",
+            "type": "usertable",
+            "index_type": "i64",
+            "key_names": [],
+            "key_types": []
+        }
+    ],
+    "ricardian_clauses": [],
+    "variants": []
+}
