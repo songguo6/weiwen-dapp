@@ -14,9 +14,7 @@ private:
 
 public:
   static random_gen& get_instance(name account) {
-    if (instance.seed == 0) {
-      instance.seed = current_time_point().time_since_epoch().count() + account.value;
-    }
+    instance.seed = current_time_point().time_since_epoch().count() + account.value;
     return instance;
   }
 
@@ -64,6 +62,18 @@ public:
         user.like_times = 0;             
       });
     }
+    
+    if(!is_today(itr->last_reward_time.sec_since_epoch())){
+
+      auto tokens = asset(get_reward(account)*10000, symbol(TOKEN_SYMBOL, 4));
+      issue_token(tokens);
+
+      users.modify(itr, account, [&](auto& user){
+        user.last_reward_time = time_point_sec(current_time_point()); 
+        user.balance += tokens;
+      }); 
+    }
+
   }
 
   ACTION deposit(name account, asset quantity){
@@ -96,7 +106,23 @@ public:
 
 private:
 
-  void issue_token(name to, asset quantity){
+  bool is_today(uint32_t last_time){
+    return current_time_point().sec_since_epoch() / 86400 == last_time / 86400;
+  }
+
+  uint32_t get_reward(name account){
+    uint32_t seconds = current_time_point().sec_since_epoch() - 1557590400;
+    if(seconds <= 30*86400){
+      return random_gen().get_instance(account).range(10000, 50000);
+    }else if(seconds > 30*86400 && seconds <= 120*86400){
+      return random_gen().get_instance(account).range(5000, 20000);
+    }else if(seconds > 120*86400 && seconds <= 360*86400){
+      return random_gen().get_instance(account).range(2000, 10000);
+    }
+    return random_gen().get_instance(account).range(1000, 5000);
+  }
+
+  void issue_token(asset quantity){
     action(
       permission_level{get_self(),"active"_n},
       "weiwentokens"_n,
@@ -105,13 +131,8 @@ private:
     ).send();
   }
 
-  void add_balance(name account, asset quantity){
+  
 
-  }
-
-  void sub_balance(name account, asset quantity){
-
-  }
 
   //用户表
   TABLE usertable {
