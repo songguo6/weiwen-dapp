@@ -76,12 +76,19 @@ public:
 
   }
 
-  ACTION deposit(name account, asset quantity){
-
-  }
-
   ACTION withdraw(name account, asset quantity){
+    require_auth(account);
 
+    user_t users(_self, _self.value);    
+    auto itr = users.find(account.value);
+
+    check(quantity.amount > 0, "amount must be greater than 1");
+    check(itr->balance >= quantity, "overdrawn balance");
+
+    transfer_token(account, quantity);
+    users.modify(itr, account, [&](auto& user){
+      user.balance -= quantity;
+    });
   }
 
   ACTION post(name author, const std::string& content, uint32_t attachtype, const std::string& attachment){
@@ -131,7 +138,15 @@ private:
     ).send();
   }
 
-  
+  void transfer_token(name to, asset quantity){
+    action(
+      permission_level{get_self(),"active"_n},
+      "weiwentokens"_n,
+      "transfer"_n,
+      std::make_tuple(get_self(), to, quantity, std::string("transfer token"))
+    ).send();
+  }
+
 
 
   //用户表
