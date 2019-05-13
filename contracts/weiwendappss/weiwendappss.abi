@@ -68,20 +68,6 @@
             ]
         },
         {
-            "name": "deposit",
-            "base": "",
-            "fields": [
-                {
-                    "name": "account",
-                    "type": "name"
-                },
-                {
-                    "name": "quantity",
-                    "type": "asset"
-                }
-            ]
-        },
-        {
             "name": "follow",
             "base": "",
             "fields": [
@@ -302,11 +288,6 @@
         {
             "name": "comment",
             "type": "comment",
-            "ricardian_contract": ""
-        },
-        {
-            "name": "deposit",
-            "type": "deposit",
             "ricardian_contract": ""
         },
         {

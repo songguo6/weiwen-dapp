@@ -43,7 +43,7 @@ public:
   using contract::contract;
 
 
-  ACTION reward(name account){
+  ACTION reward(name account) {
     require_auth(account);
 
     user_t users(_self, _self.value);    
@@ -73,16 +73,15 @@ public:
         user.balance += tokens;
       }); 
     }
-
   }
 
-  ACTION withdraw(name account, asset quantity){
+  ACTION withdraw(name account, asset quantity) {
     require_auth(account);
 
     user_t users(_self, _self.value);    
     auto itr = users.find(account.value);
 
-    check(quantity.amount > 0, "amount must be greater than 1");
+    check(quantity.amount > 0, "withdraw amount must be positive");
     check(itr->balance >= quantity, "overdrawn balance");
 
     transfer_token(account, quantity);
@@ -91,25 +90,39 @@ public:
     });
   }
 
-  ACTION post(name author, const std::string& content, uint32_t attachtype, const std::string& attachment){
+  ACTION post(name author, const std::string& content, uint32_t attachtype, const std::string& attachment) {
     
   }
 
-  ACTION comment(name author, const std::string& content, uint64_t post_id, uint64_t pid = 0, name reply_to = name()){
+  ACTION comment(name author, const std::string& content, uint64_t post_id, uint64_t pid = 0, name reply_to = name()) {
 
   }
 
-  ACTION like(name author, uint32_t type, uint64_t type_id){
+  ACTION like(name author, uint32_t type, uint64_t type_id) {
 
   }
 
-  ACTION follow(name from, name to){
+  ACTION follow(name from, name to) {
 
   }
 
-  ACTION unfollow(name from, name to){
+  ACTION unfollow(name from, name to) {
 
   }
+
+  [[eosio::on_notify("weiwentokens::transfer")]] 
+  void deposit(name from, name to, asset quantity, std::string memo) {
+    if(quantity.symbol == symbol(TOKEN_SYMBOL, 4)){
+      user_t users(_self, _self.value);    
+      auto itr = users.find(from.value);    
+
+      if(itr != users.end()){
+        users.modify(itr, _self, [&](auto& user){
+          user.balance += quantity;
+        });
+      }    
+    }
+  }  
 
 private:
 
@@ -131,19 +144,19 @@ private:
 
   void issue_token(asset quantity){
     action(
-      permission_level{get_self(),"active"_n},
+      permission_level{_self,"active"_n},
       "weiwentokens"_n,
       "issue"_n,
-      std::make_tuple(get_self(), quantity, std::string("issue token"))
+      std::make_tuple(_self, quantity, std::string("issue token"))
     ).send();
   }
 
   void transfer_token(name to, asset quantity){
     action(
-      permission_level{get_self(),"active"_n},
+      permission_level{_self,"active"_n},
       "weiwentokens"_n,
       "transfer"_n,
-      std::make_tuple(get_self(), to, quantity, std::string("transfer token"))
+      std::make_tuple(_self, to, quantity, std::string("transfer token"))
     ).send();
   }
 
