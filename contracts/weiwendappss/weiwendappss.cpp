@@ -42,7 +42,9 @@ CONTRACT weiwendappss : public eosio::contract {
 public:
   using contract::contract;
 
-
+  /**
+   * 每日签到领币
+   */
   ACTION reward(name account) {
     require_auth(account);
 
@@ -75,6 +77,44 @@ public:
     }
   }
 
+  /**
+   * 发微文
+   */
+  ACTION post(name author, const std::string& content, uint32_t attachtype, const std::string& attachment) {
+    
+  }
+
+  /**
+   * 评论
+   */
+  ACTION comment(name author, const std::string& content, uint64_t post_id, uint64_t pid = 0, name reply_to = name()) {
+
+  }
+
+  /**
+   * 点赞
+   */
+  ACTION like(name author, uint32_t type, uint64_t type_id) {
+
+  }
+
+  /**
+   * 关注
+   */
+  ACTION follow(name from, name to) {
+
+  }
+
+  /**
+   * 取消关注
+   */
+  ACTION unfollow(name from, name to) {
+
+  }
+
+  /**
+   * 提现
+   */
   ACTION withdraw(name account, asset quantity) {
     require_auth(account);
 
@@ -90,26 +130,9 @@ public:
     });
   }
 
-  ACTION post(name author, const std::string& content, uint32_t attachtype, const std::string& attachment) {
-    
-  }
-
-  ACTION comment(name author, const std::string& content, uint64_t post_id, uint64_t pid = 0, name reply_to = name()) {
-
-  }
-
-  ACTION like(name author, uint32_t type, uint64_t type_id) {
-
-  }
-
-  ACTION follow(name from, name to) {
-
-  }
-
-  ACTION unfollow(name from, name to) {
-
-  }
-
+  /**
+   * 充值
+   */
   [[eosio::on_notify("weiwentokens::transfer")]] 
   void deposit(name from, name to, asset quantity, std::string memo) {
     if(quantity.symbol == symbol(TOKEN_SYMBOL, 4)){
