@@ -3,7 +3,7 @@
 #include <eosio/system.hpp>
 #include <eosio/crypto.hpp>
 
-#define TOKEN_SYMBOL "WEI"
+#define TOKEN_SYMBOL symbol("WEI", 4)
 
 using namespace eosio;
 
@@ -54,7 +54,7 @@ public:
     if(itr == users.end()){
       itr = users.emplace(account, [&](auto& user){
         user.account = account;
-        user.balance = asset(0, symbol(TOKEN_SYMBOL, 4));
+        user.balance = asset(0, TOKEN_SYMBOL);
         user.follow_num = 0;   
         user.fans_num = 0;             
         user.post_num = 0;              
@@ -67,7 +67,7 @@ public:
     
     if(!is_today(itr->last_reward_time.sec_since_epoch())){
 
-      auto tokens = asset(get_reward(account)*10000, symbol(TOKEN_SYMBOL, 4));
+      auto tokens = asset(get_reward(account)*10000, TOKEN_SYMBOL);
       issue_token(tokens);
 
       users.modify(itr, account, [&](auto& user){
@@ -135,7 +135,9 @@ public:
    */
   [[eosio::on_notify("weiwentokens::transfer")]] 
   void deposit(name from, name to, asset quantity, std::string memo) {
-    if(quantity.symbol == symbol(TOKEN_SYMBOL, 4)){
+    if(to != _self) return;
+
+    if(quantity.symbol == TOKEN_SYMBOL){
       user_t users(_self, _self.value);    
       auto itr = users.find(from.value);    
 
