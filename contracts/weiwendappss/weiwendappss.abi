@@ -20,6 +20,10 @@
                     "type": "uint64"
                 },
                 {
+                    "name": "has_parent",
+                    "type": "bool"
+                },
+                {
                     "name": "pid",
                     "type": "uint64"
                 },
@@ -56,6 +60,10 @@
                 {
                     "name": "like_num",
                     "type": "uint32"
+                },
+                {
+                    "name": "has_parent",
+                    "type": "bool"
                 },
                 {
                     "name": "pid",

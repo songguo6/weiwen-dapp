@@ -40,7 +40,8 @@ public:
 CONTRACT weiwendappss : public eosio::contract {
 
 public:
-  using contract::contract;
+  weiwendappss(name self, name first_receiver, datastream<const char *> ds) : 
+    contract(self, first_receiver, ds), users(self, self.value) {}  
 
   /**
    * 每日签到领币
@@ -48,7 +49,6 @@ public:
   ACTION reward(name account) {
     require_auth(account);
 
-    user_t users(_self, _self.value);    
     auto itr = users.find(account.value);
     
     if(itr == users.end()){
@@ -81,35 +81,123 @@ public:
    * 发微文
    */
   ACTION post(name author, const std::string& content, uint32_t attachtype, const std::string& attachment) {
-    
+    require_auth(author);
+
+    check_user(author);
+    if(attachtype != 0){
+      check(attachment != "", "attachment can not be empty");
+    }
+
+    post_t posts(_self, _self.value);
+    posts.emplace(author, [&](auto& post){
+      post.id = posts.available_primary_key();
+      post.author = author;
+      post.content = content;
+      post.attachtype = attachtype;
+      post.attachment = attachment;
+      post.time = time_point_sec(current_time_point()); 
+      post.balance = asset(0, TOKEN_SYMBOL);
+      post.like_num = 0;
+      post.comment_num = 0;
+    });
+
+    auto itr = users.find(author.value);
+    users.modify(itr, same_payer, [&](auto& user){
+      user.post_num++;
+    });
   }
 
   /**
    * 评论
    */
-  ACTION comment(name author, const std::string& content, uint64_t post_id, uint64_t pid = 0, name reply_to = name()) {
+  ACTION comment(name author, const std::string& content, uint64_t post_id,
+    bool has_parent, uint64_t pid, name reply_to) {
 
+    require_auth(author);
+
+    check_user(author);
+
+    post_t posts(_self, _self.value);
+    auto itr = posts.find(post_id);
+    check(itr != posts.end(), "post does not exist");
+
+    comment_t comments(_self, _self.value);
+    if(has_parent){
+      check(comments.find(pid) != comments.end(), "parent comment does not exist");
+    }
+
+    comments.emplace(author, [&](auto& comment){
+      comment.id = comments.available_primary_key();
+      comment.post_id = post_id;
+      comment.author = author;    
+      comment.time = time_point_sec(current_time_point()); 
+      comment.balance = asset(0, TOKEN_SYMBOL);
+      comment.like_num = 0;
+      comment.has_parent = has_parent;
+      comment.pid = pid;
+      comment.reply_to = reply_to;
+    });
+
+    posts.modify(itr, same_payer, [&](auto& post){
+      post.comment_num++;
+    });
   }
 
   /**
    * 点赞
    */
   ACTION like(name author, uint32_t type, uint64_t type_id) {
+    require_auth(author);
 
+    check_user(author);
+    check(1 == type|| 2 == type, "invalid like type");
+
+    if(1 == type){//微文
+      post_t posts(_self, _self.value);
+      auto itr = posts.find(type_id);
+      check(itr != posts.end(), "post does not exist");
+
+      posts.modify(itr, same_payer, [&](auto& post){
+        post.like_num++;
+      });
+
+    }else if(2 == type){//评论
+      comment_t comments(_self, _self.value);
+      auto itr = comments.find(type_id);
+      check(itr != comments.end(), "comment does not exist");
+
+      comments.modify(itr, same_payer, [&](auto& comment){
+        comment.like_num++;
+      });
+    }
+
+    like_t likes(_self, _self.value);
+    likes.emplace(author, [&](auto& like){
+      like.id = likes.available_primary_key();
+      like.type = type;
+      like.type_id = type_id;
+      like.author = author;    
+    });  
   }
 
   /**
    * 关注
    */
   ACTION follow(name from, name to) {
+    require_auth(from);
 
+    check_user(from);
+    check_user(to);
   }
 
   /**
    * 取消关注
    */
   ACTION unfollow(name from, name to) {
+    require_auth(from);
 
+    check_user(from);
+    check_user(to);
   }
 
   /**
@@ -118,7 +206,6 @@ public:
   ACTION withdraw(name account, asset quantity) {
     require_auth(account);
 
-    user_t users(_self, _self.value);    
     auto itr = users.find(account.value);
 
     check(quantity.amount > 0, "withdraw amount must be positive");
@@ -137,8 +224,7 @@ public:
   void deposit(name from, name to, asset quantity, std::string memo) {
     if(to != _self) return;
 
-    if(quantity.symbol == TOKEN_SYMBOL){
-      user_t users(_self, _self.value);    
+    if(quantity.symbol == TOKEN_SYMBOL){ 
       auto itr = users.find(from.value);    
 
       if(itr != users.end()){
@@ -154,6 +240,11 @@ private:
   bool is_today(uint32_t last_time){
     return current_time_point().sec_since_epoch() / 86400 == last_time / 86400;
   }
+
+  void check_user(name account){  
+    auto itr = users.find(account.value);    
+    check(itr != users.end(), "user does not exist");
+  }  
 
   uint32_t get_reward(name account){
     uint32_t seconds = current_time_point().sec_since_epoch() - 1557590400;
@@ -202,14 +293,15 @@ private:
     uint64_t primary_key() const { return account.value; }
   };
 
-  typedef multi_index<"usertable"_n, usertable> user_t;  
+  typedef multi_index<"usertable"_n, usertable> user_t;
+  user_t users;  
 
   //微文表
   TABLE posttable {
     uint64_t id;              //自增id
     name author;              //作者
     std::string content;      //内容
-    uint32_t attachtype;      //附件类型 0=无 1=url 2=ipfs hash 3=file
+    uint32_t attachtype;      //附件类型 0=无 1=url 2=ipfshash 3=pic 4=video 5=file
     std::string attachment;   //附件
     time_point_sec time;      //创建时间
     asset balance;            //获得代币数
@@ -232,6 +324,7 @@ private:
     time_point_sec time;      //创建时间
     asset balance;            //获得代币数
     uint32_t like_num;        //获得赞数
+    bool has_parent;          //是否有父级评论
     uint64_t pid;             //父级评论id
     name reply_to;            //回复 @账户名：xxx 
 
