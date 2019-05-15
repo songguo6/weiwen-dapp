@@ -230,8 +230,8 @@
                     "type": "name"
                 },
                 {
-                    "name": "to",
-                    "type": "name"
+                    "name": "id",
+                    "type": "uint64"
                 }
             ]
         },

@@ -192,16 +192,38 @@ public:
 
     check_user(from);
     check_user(to);
+
+    check(from != to, "can not follow yourself");
+
+    follow_t follows(_self, _self.value);
+    auto secondary = follows.get_index<"byfrom"_n>();
+  
+    for(auto itr = secondary.lower_bound(from.value); itr != secondary.upper_bound(from.value); itr++){
+      if(itr->to == to){
+        check(false, "already followed");
+      }
+    }
+
+    follows.emplace(from, [&](auto& follow){
+      follow.id = follows.available_primary_key();
+      follow.from = from;
+      follow.to = to;
+    });
   }
 
   /**
    * 取消关注
    */
-  ACTION unfollow(name from, name to) {
+  ACTION unfollow(name from, uint64_t id) {
     require_auth(from);
 
-    check_user(from);
-    check_user(to);
+    follow_t follows(_self, _self.value);
+    auto itr = follows.find(id);
+
+    check(itr != follows.end(), "follow does not exist");
+    check(itr->from == from, "invalid follow");
+
+    follows.erase(itr);
   }
 
   /**
@@ -276,8 +298,8 @@ private:
    */
   uint32_t get_like_reward(name account){
     auto itr = users.find(account.value);
-    auto range = random_gen().get_instance(account).range(100, 500);
-    return itr->balance.amount * range * 0.00001; 
+    auto rnum = random_gen().get_instance(account).range(100, 500);
+    return itr->balance.amount * rnum * 0.00001; 
   }
 
   /**
