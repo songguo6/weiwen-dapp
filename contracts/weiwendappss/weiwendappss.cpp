@@ -4,9 +4,15 @@
 #include <eosio/crypto.hpp>
 
 #define TOKEN_SYMBOL symbol("WEI", 4)
+#define GENESIS_TIME 1557849600
+#define TYPE_POST 1               
+#define TYPE_COMMENT 2
 
 using namespace eosio;
 
+/**
+ * 随机数生成器
+ */
 class random_gen {
 private:
   static random_gen instance;
@@ -37,6 +43,9 @@ public:
   }
 };
 
+/**
+ * 合约类
+ */
 CONTRACT weiwendappss : public eosio::contract {
 
 public:
@@ -67,7 +76,7 @@ public:
     
     if(!is_today(itr->last_reward_time.sec_since_epoch())){
 
-      auto tokens = asset(get_reward(account)*10000, TOKEN_SYMBOL);
+      auto tokens = asset(get_reward(account), TOKEN_SYMBOL);
       issue_token(tokens);
 
       users.modify(itr, account, [&](auto& user){
@@ -150,25 +159,20 @@ public:
     require_auth(author);
 
     check_user(author);
-    check(1 == type|| 2 == type, "invalid like type");
+    check(type == TYPE_POST || type == TYPE_COMMENT, "invalid like type");
+    check_liked(author, type, type_id);
 
-    if(1 == type){//微文
+    if(type == TYPE_POST){
       post_t posts(_self, _self.value);
-      auto itr = posts.find(type_id);
-      check(itr != posts.end(), "post does not exist");
+      check(posts.find(type_id) != posts.end(), "post does not exist");
 
-      posts.modify(itr, same_payer, [&](auto& post){
-        post.like_num++;
-      });
+      update_like_data<post_t>(author, type_id);
 
-    }else if(2 == type){//评论
+    }else if(type == TYPE_COMMENT){
       comment_t comments(_self, _self.value);
-      auto itr = comments.find(type_id);
-      check(itr != comments.end(), "comment does not exist");
+      check(comments.find(type_id) != comments.end(), "comment does not exist");
 
-      comments.modify(itr, same_payer, [&](auto& comment){
-        comment.like_num++;
-      });
+      update_like_data<comment_t>(author, type_id);
     }
 
     like_t likes(_self, _self.value);
@@ -233,31 +237,113 @@ public:
         });
       }    
     }
-  }  
+  }   
 
 private:
 
+  /**
+   * 判断指定时间是否是今天
+   */
   bool is_today(uint32_t last_time){
     return current_time_point().sec_since_epoch() / 86400 == last_time / 86400;
   }
 
+  /**
+   * 检查用户是否存在
+   */
   void check_user(name account){  
     auto itr = users.find(account.value);    
     check(itr != users.end(), "user does not exist");
   }  
 
+  /**
+   * 计算每日签到领币的数量
+   */
   uint32_t get_reward(name account){
-    uint32_t seconds = current_time_point().sec_since_epoch() - 1557590400;
+    uint32_t seconds = current_time_point().sec_since_epoch() - GENESIS_TIME;
     if(seconds <= 30*86400){
-      return random_gen().get_instance(account).range(10000, 50000);
+      return random_gen().get_instance(account).range(10000, 50000) * 10000;
     }else if(seconds > 30*86400 && seconds <= 120*86400){
-      return random_gen().get_instance(account).range(5000, 20000);
+      return random_gen().get_instance(account).range(5000, 20000) * 10000;
     }else if(seconds > 120*86400 && seconds <= 360*86400){
-      return random_gen().get_instance(account).range(2000, 10000);
+      return random_gen().get_instance(account).range(2000, 10000) * 10000;
     }
-    return random_gen().get_instance(account).range(1000, 5000);
+    return random_gen().get_instance(account).range(1000, 5000) * 10000;
   }
 
+  /**
+   * 计算每次点赞领币的数量
+   */
+  uint32_t get_like_reward(name account){
+    auto itr = users.find(account.value);
+    auto range = random_gen().get_instance(account).range(100, 500);
+    return itr->balance.amount * range * 0.00001; 
+  }
+
+  /**
+   * 检查是否已经点赞
+   */
+  void check_liked(name author, uint32_t type, uint64_t type_id){
+    bool liked = false;
+    
+    like_t likes(_self, _self.value);
+    auto secondary = likes.get_index<"byauthor"_n>();
+  
+    for(auto itr = secondary.lower_bound(author.value); itr != secondary.upper_bound(author.value); itr++){
+      if(itr->type == type && itr->type_id == type_id){
+        liked = true;
+      }
+    }
+
+    if(liked) check(false, "already liked");
+  }
+
+  /**
+   * 更新点赞相关的数据
+   */
+  template<typename T>
+  void update_like_data(name liker, uint64_t type_id){
+
+    T datas(_self, _self.value);
+    auto itr = datas.find(type_id);
+    auto liker_itr = users.find(liker.value);
+
+    datas.modify(itr, same_payer, [&](auto& row){
+      row.like_num++;
+    });
+    users.modify(users.find(itr->author.value), same_payer, [&](auto& user){
+      user.like_num++;
+    });
+
+    if(liker != itr->author){
+
+      bool istoday = is_today(liker_itr->last_like_time.sec_since_epoch());  
+
+      if(!istoday || (istoday && liker_itr->like_times < 10)){
+  
+        auto tokens = asset(get_like_reward(liker), TOKEN_SYMBOL);
+          
+        issue_token(tokens);
+        users.modify(liker_itr, same_payer, [&](auto& user){
+          user.balance += tokens;
+          user.last_like_time = time_point_sec(current_time_point()); 
+          user.like_times = istoday ? (user.like_times + 1) : 1;
+        }); 
+
+        issue_token(tokens);
+        users.modify(users.find(itr->author.value), same_payer, [&](auto& user){
+          user.balance += tokens;    
+        });  
+        datas.modify(itr, same_payer, [&](auto& row){
+          row.balance += tokens;
+        }); 
+      }      
+    }
+  }
+
+  /**
+   * 发行代币 
+   */
   void issue_token(asset quantity){
     action(
       permission_level{_self,"active"_n},
@@ -267,6 +353,9 @@ private:
     ).send();
   }
 
+  /**
+   * 转账代币 
+   */
   void transfer_token(name to, asset quantity){
     action(
       permission_level{_self,"active"_n},
