@@ -4,9 +4,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "eosjs": "^20.0.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
-    "react-scripts": "3.0.0"
+    "react-scripts": "3.0.0",
+    "scatterjs-core": "^2.7.18",
+    "scatterjs-plugin-eosjs2": "^1.5.0"
   },
   "scripts": {
     "start": "react-scripts start",
