@@ -4,7 +4,6 @@ const defaultState = {
   account: ''
 }
 
-// reducer 可以接收state，但不能修改state
 export default (state = defaultState, action) => {
   let newState = JSON.parse(JSON.stringify(state));
   switch(action.type){

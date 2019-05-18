@@ -1,18 +1,38 @@
 import React, { Component } from 'react';
-import store from './store';
+import { connect } from 'react-redux';
+import * as actionCreator from './store/actionCreator';
 
 class App extends Component {
   render() {
+    const { account, login, logout } = this.props;
     return (
       <div>
         <div>
-          <input />
-          <button>提交</button>
+          <button onClick={account ? logout: login }>
+            {account ? '注销' : '登录'}
+          </button>
         </div>
-        <div>EOS Account Name: </div>
+        <div>EOS Account Name: {account}</div>
       </div>
     );
   }
 }
 
-export default App;
+const mapStateToProps = (state) => {
+  return {
+    account : state.account
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    login(){
+      dispatch(actionCreator.changeLoginStatus("songguo55555"));  
+    },
+    logout(){
+      dispatch(actionCreator.changeLoginStatus(""));  
+    }
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
