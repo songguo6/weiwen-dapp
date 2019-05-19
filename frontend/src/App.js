@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import * as actionCreator from './store/actionCreator';
+
+import {login, logout} from './api/login';
 
 class App extends Component {
   render() {
@@ -27,10 +28,10 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     login(){
-      dispatch(actionCreator.changeLoginStatus("songguo55555"));  
+      dispatch(login());  
     },
     logout(){
-      dispatch(actionCreator.changeLoginStatus(""));  
+      dispatch(logout());  
     }
   }
 }
