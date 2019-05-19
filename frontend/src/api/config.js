@@ -3,7 +3,7 @@ import { Api, JsonRpc } from 'eosjs'
 import ScatterJS from 'scatterjs-core'
 import ScatterEOS from 'scatterjs-plugin-eosjs2'
 
-const app_name = 'weiwendapp';
+const app_name = '微文';
 
 // jungle testnet
 const network = {

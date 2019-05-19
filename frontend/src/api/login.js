@@ -9,7 +9,7 @@ const checkConnected = async () => {
     { initTimeout: 5000 },
   );
   if (!connected) {
-    console.log(`You need to have Scatter installed. Visit https://get-scatter.com`);
+    console.log('You need to have Scatter installed');
   }
 }
 
