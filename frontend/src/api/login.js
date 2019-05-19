@@ -13,23 +13,20 @@ const checkConnected = async () => {
   }
 }
 
-export const login = () => (
-  async (dispatch) => {
-    try {
-      await checkConnected();
-      const identity = await ScatterJS.scatter.login({accounts:[network]})
-      const account = identity.accounts[0];
-      dispatch(actionCreator.changeLoginStatus(account.name));   
-    } catch (error) {
-      console.error(error);
-    }
+export const login = async (dispatch) => {
+  try {
+    await checkConnected();
+    const identity = await ScatterJS.scatter.login({accounts:[network]})
+    const account = identity.accounts[0];
+    dispatch(actionCreator.changeLoginStatus(account.name));   
+  } catch (error) {
+    console.error(error);
   }
-);
+}
 
-export const logout = () => (
-  async (dispatch) => {
-    await ScatterJS.scatter.logout();
-    dispatch(actionCreator.changeLoginStatus(false));
-  }
-);
+export const logout = async (dispatch) => {
+  await ScatterJS.scatter.logout();
+  dispatch(actionCreator.changeLoginStatus(false));
+}
+
 

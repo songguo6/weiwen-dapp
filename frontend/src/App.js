@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
 import {login, logout} from './api/login';
 
 class App extends Component {
@@ -28,10 +27,10 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     login(){
-      dispatch(login());  
+      dispatch(login);  
     },
     logout(){
-      dispatch(logout());  
+      dispatch(logout);  
     }
   }
 }
