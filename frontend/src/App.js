@@ -4,6 +4,8 @@ import { login, logout } from './api/login';
 
 import { Layout, Button } from 'antd';
 
+import './App.css';
+
 class App extends Component {
   render() {
     const { account, login, logout } = this.props;
