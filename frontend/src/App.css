@@ -1,1 +1,5 @@
 .ant-layout-header { border-bottom: 0.5px solid #e1e1e1; }
+.ant-layout-header div { float: left; color: #1da1f2; width: 200px; font-size: 28px; }
+.ant-layout-content { text-align: center; }
+.ant-layout-footer { text-align: center; }
+

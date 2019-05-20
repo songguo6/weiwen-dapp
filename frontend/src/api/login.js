@@ -1,17 +1,8 @@
 import ScatterJS from 'scatterjs-core'
-import { network, app_name } from './config'
+import { network } from './config'
+import { checkConnected } from './common';
 
 import * as actionCreator from '../store/actionCreator';
-
-const checkConnected = async () => {
-  const connected = await ScatterJS.scatter.connect(
-    app_name,
-    { initTimeout: 5000 },
-  );
-  if (!connected) {
-    console.log('You need to have Scatter installed');
-  }
-}
 
 export const login = async (dispatch) => {
   try {
@@ -25,8 +16,23 @@ export const login = async (dispatch) => {
 }
 
 export const logout = async (dispatch) => {
-  await ScatterJS.scatter.logout();
-  dispatch(actionCreator.changeLoginStatus(false));
+  try {
+    await ScatterJS.scatter.logout();
+    dispatch(actionCreator.changeLoginStatus(false));
+  } catch (error) {
+    console.error(error);
+  }
 }
+
+export const checkLogin = async (dispatch) => {
+  try {
+    await checkConnected();
+    const res = await ScatterJS.scatter.checkLogin();
+    if(res) dispatch(login);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 
 
