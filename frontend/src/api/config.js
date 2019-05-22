@@ -4,6 +4,7 @@ import ScatterJS from 'scatterjs-core'
 import ScatterEOS from 'scatterjs-plugin-eosjs2'
 
 const app_name = '微文';
+const contract = 'weiwendappss';
 
 // jungle testnet
 const network = {
@@ -46,4 +47,4 @@ const api = new Api({
   textEncoder: new TextEncoder(),
 });
 
-export { api, rpc, network, app_name }
+export { api, rpc, network, app_name, contract }
