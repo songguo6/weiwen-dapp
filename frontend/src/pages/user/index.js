@@ -18,6 +18,16 @@ class User extends Component {
     });
   }
 
+  renderCol(label, value){
+    return (
+      <Col lg={24} xl={12} className='item'>
+        <Link to='/'>
+          <span>{label} </span>{this.props.account ?  value : ''}
+        </Link>
+      </Col>
+    );
+  }
+
   render(){
     const { account } = this.props;
     const { user } = this.state;
@@ -30,26 +40,10 @@ class User extends Component {
           </div>
           <Divider dashed />
           <Row gutter={48} className='user'>
-            <Col lg={24} xl={12} className='item'>
-              <Link to='/'>
-                <span>微文 </span>{account ? user.post_num : ''}
-              </Link>
-            </Col>
-            <Col lg={24} xl={12} className='item'>
-              <Link to='/'>
-                <span>获赞 </span>{account ? user.like_num : ''}
-              </Link>
-            </Col>
-            <Col lg={24} xl={12} className='item'>
-              <Link to='/'>
-                <span>关注 </span>{account ? user.follow_num : ''}
-              </Link>
-            </Col>
-            <Col lg={24} xl={12} className='item'>
-              <Link to='/'>
-                <span>粉丝 </span>{account ? user.fans_num : ''}
-              </Link>
-            </Col>
+            {this.renderCol('微文', user.post_num)}
+            {this.renderCol('获赞', user.like_num)}
+            {this.renderCol('关注', user.follow_num)}
+            {this.renderCol('粉丝', user.fans_num)}
           </Row>
           <Divider style={{ marginTop: 20 }} dashed />
           <Row gutter={0} className='user'>
