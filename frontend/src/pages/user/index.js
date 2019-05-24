@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 import { Row, Col, Card, Divider, Avatar } from 'antd';
 import { Link } from 'react-router-dom';
@@ -7,38 +8,46 @@ import { fetchByPrimary } from '../../api/fetch';
 
 class User extends Component {
 
+  state = {
+    user: {}
+  }
+
   componentDidMount(){
-    console.log(fetchByPrimary('usertable','account','songguo12345'));
+    fetchByPrimary('usertable','account',this.props.account).then(res => {
+      this.setState({user: res});
+    });
   }
 
   render(){
+    const { account } = this.props;
+    const { user } = this.state;
     return (
       <Card bordered={false} style={{ marginBottom: 24 }}>
         <div>
           <div className='avatar'>
             <img alt="" src='https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png' />
-            <div className='name'>songguo55555</div>
+            <div className='name'>{account}</div>
           </div>
           <Divider dashed />
           <Row gutter={48} className='user'>
             <Col lg={24} xl={12} className='item'>
               <Link to='/'>
-                <span>微文 </span>25
+                <span>微文 </span>{account ? user.post_num : ''}
               </Link>
             </Col>
             <Col lg={24} xl={12} className='item'>
               <Link to='/'>
-                <span>获赞 </span>25
+                <span>获赞 </span>{account ? user.like_num : ''}
               </Link>
             </Col>
             <Col lg={24} xl={12} className='item'>
               <Link to='/'>
-                <span>关注 </span>25
+                <span>关注 </span>{account ? user.follow_num : ''}
               </Link>
             </Col>
             <Col lg={24} xl={12} className='item'>
               <Link to='/'>
-                <span>粉丝 </span>25
+                <span>粉丝 </span>{account ? user.fans_num : ''}
               </Link>
             </Col>
           </Row>
@@ -46,7 +55,7 @@ class User extends Component {
           <Row gutter={0} className='user'>
             <Col className='item'>
               <Link to='/'>
-                <span>获得收益 </span>25 
+                <span>获得收益 </span>{account ? user.balance : ''} 
                 <Avatar 
                   size="small" 
                   style={{marginLeft: 5 }}
@@ -61,4 +70,8 @@ class User extends Component {
   }
 }
 
-export default User;
+const mapState = (state) => ({
+  account: state.account,
+});
+
+export default connect(mapState, null)(User);
