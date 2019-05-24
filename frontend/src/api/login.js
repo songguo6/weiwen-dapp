@@ -1,7 +1,6 @@
 import ScatterJS from 'scatterjs-core'
 import { network } from './config'
 import { checkConnected } from './common';
-import { fetchByPrimary } from './fetch';
 
 import * as actionCreator from '../store/actionCreator';
 
@@ -10,9 +9,7 @@ export const login = async (dispatch) => {
     await checkConnected();
     const identity = await ScatterJS.scatter.login({accounts:[network]})
     const account = identity.accounts[0];
-    fetchByPrimary('usertable','account',account.name).then(res => {
-      dispatch(actionCreator.changeLoginStatus(res));   
-    });
+    dispatch(actionCreator.changeLoginStatus(account.name));   
   } catch (error) {
     console.error(error);
   }
@@ -21,14 +18,7 @@ export const login = async (dispatch) => {
 export const logout = async (dispatch) => {
   try {
     await ScatterJS.scatter.logout();
-    dispatch(actionCreator.changeLoginStatus({
-      account: '',
-      balance: '',
-      follow_num: '',
-      fans_num: '',
-      post_num: '',
-      like_num: '',
-    }));
+    dispatch(actionCreator.changeLoginStatus(false));
   } catch (error) {
     console.error(error);
   }

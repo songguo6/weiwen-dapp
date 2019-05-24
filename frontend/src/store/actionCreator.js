@@ -1,6 +1,6 @@
 import * as actionTypes from './actionTypes';
 
-export const changeLoginStatus = (user) => ({
+export const changeLoginStatus = (account) => ({
   type: actionTypes.CHANGE_LOGIN_STATUS,
-  value: user
+  value: account
 });

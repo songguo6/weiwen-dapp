@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { login, logout, checkLogin } from './api/login';
-import { BrowserRouter } from 'react-router-dom';
 
 import { Layout, Button, Row, Col } from 'antd';
 import User from './pages/user';  
@@ -15,44 +14,42 @@ class App extends Component {
   }
 
   render() {
-    const { user, login, logout } = this.props;
+    const { account, login, logout } = this.props;
     const { Header, Content, Footer } = Layout;  
 
     return (
-      <BrowserRouter>
-        <Layout>
-          <Header>
-            <div>微文</div>
-            <Button
-              type='primary'
-              style={{float:'right', marginTop:15}}
-              onClick={user.account ? logout: login }
-            >
-              {user.account ? '注销' : '登录'}
-            </Button>
-          </Header>
-          <Content>
-            <Row>
-              <Col lg={7} md={24}>
-                <User />
-              </Col>
-              <Col lg={17} md={24}>
+      <Layout>
+        <Header>
+          <div>微文</div>
+          <Button
+            type='primary'
+            style={{float:'right', marginTop:15}}
+            onClick={account ? logout: login }
+          >
+            {account ? '注销' : '登录'}
+          </Button>
+        </Header>
+        <Content>
+          <Row gutter={24}>
+            <Col lg={7} md={24}>
+              <User />
+            </Col>
+            <Col lg={17} md={24}>
 
-              </Col>
-            </Row>          
-          </Content>
-          <Footer>
-            微文 ©2019 Created by Songguo
-          </Footer>
-        </Layout>  
-      </BrowserRouter>
+            </Col>
+          </Row>          
+        </Content>
+        <Footer>
+          微文 ©2019 Created by Songguo
+        </Footer>
+      </Layout>
     );
   }
 }
 
 const mapStateToProps = (state) => {
   return {
-    user : state.user
+    account : state.account
   }
 }
 
