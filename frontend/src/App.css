@@ -2,4 +2,11 @@
 .ant-layout-header div { float: left; color: #1da1f2; width: 200px; font-size: 28px; }
 .ant-layout-content { text-align: center; }
 .ant-layout-footer { text-align: center; }
+.avatar { margin-bottom: 24px; text-align: center; }
+.avatar img { width: 104px; height: 104px; margin-bottom: 20px;}
+.avatar .name { margin-bottom: 4px; font-weight: 500; font-size: 20px; line-height: 28px; }
+.user { font-size: 20px; }
+.user .item { margin-top: 20px; }
+.user .item span { color: rgba(0, 0, 0, 0.65); }
+
 

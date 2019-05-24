@@ -38,3 +38,12 @@ export const fetchAll = async (table, options) => {
   return rows;
 }
 
+export const fetchByPrimary = async (table, keyName, keyValue) => {
+  const rows = await fetchAll(table, {
+    key: keyName,
+    lower_bound: keyValue,
+    upper_bound: keyValue,
+    limit: 1,
+  });
+  return rows[0];
+}
