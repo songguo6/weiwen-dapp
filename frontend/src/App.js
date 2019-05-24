@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { BrowserRouter } from 'react-router-dom';
 import { login, logout, checkLogin } from './api/login';
 
 import { Layout, Button, Row, Col } from 'antd';
@@ -18,31 +19,33 @@ class App extends Component {
     const { Header, Content, Footer } = Layout;  
 
     return (
-      <Layout>
-        <Header>
-          <div>微文</div>
-          <Button
-            type='primary'
-            style={{float:'right', marginTop:15}}
-            onClick={account ? logout: login }
-          >
-            {account ? '注销' : '登录'}
-          </Button>
-        </Header>
-        <Content>
-          <Row gutter={24}>
-            <Col lg={7} md={24}>
-              <User />
-            </Col>
-            <Col lg={17} md={24}>
+      <BrowserRouter>
+        <Layout>
+          <Header>
+            <div>微文</div>
+            <Button
+              type='primary'
+              style={{float:'right', marginTop:15}}
+              onClick={account ? logout: login }
+            >
+              {account ? '注销' : '登录'}
+            </Button>
+          </Header>
+          <Content>
+            <Row>
+              <Col lg={7} md={24}>
+                <User />
+              </Col>
+              <Col lg={17} md={24}>
 
-            </Col>
-          </Row>          
-        </Content>
-        <Footer>
-          微文 ©2019 Created by Songguo
-        </Footer>
-      </Layout>
+              </Col>
+            </Row>          
+          </Content>
+          <Footer>
+            微文 ©2019 Created by Songguo
+          </Footer>
+        </Layout>
+      </BrowserRouter>
     );
   }
 }
