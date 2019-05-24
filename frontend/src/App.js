@@ -15,7 +15,7 @@ class App extends Component {
   }
 
   render() {
-    const { account, login, logout } = this.props;
+    const { user, login, logout } = this.props;
     const { Header, Content, Footer } = Layout;  
 
     return (
@@ -26,9 +26,9 @@ class App extends Component {
             <Button
               type='primary'
               style={{float:'right', marginTop:15}}
-              onClick={account ? logout: login }
+              onClick={user.account ? logout: login }
             >
-              {account ? '注销' : '登录'}
+              {user.account ? '注销' : '登录'}
             </Button>
           </Header>
           <Content>
@@ -52,7 +52,7 @@ class App extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    account : state.account
+    user : state.user
   }
 }
 

@@ -4,39 +4,26 @@ import { connect } from 'react-redux';
 import { Row, Col, Card, Divider, Avatar } from 'antd';
 import { Link } from 'react-router-dom';
 
-import { fetchByPrimary } from '../../api/fetch'; 
-
 class User extends Component {
-
-  state = {
-    user: {}
-  }
-
-  componentDidMount(){
-    fetchByPrimary('usertable','account',this.props.account).then(res => {
-      this.setState({user: res});
-    });
-  }
 
   renderCol(label, value){
     return (
       <Col lg={24} xl={12} className='item'>
         <Link to='/'>
-          <span>{label} </span>{this.props.account ?  value : ''}
+          <span>{label} </span>{value}
         </Link>
       </Col>
     );
   }
 
   render(){
-    const { account } = this.props;
-    const { user } = this.state;
+    const { user } = this.props;
     return (
       <Card bordered={false} style={{ marginBottom: 24 }}>
         <div>
           <div className='avatar'>
             <img alt="" src='https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png' />
-            <div className='name'>{account}</div>
+            <div className='name'>{user.account}</div>
           </div>
           <Divider dashed />
           <Row gutter={48} className='user'>
@@ -49,7 +36,7 @@ class User extends Component {
           <Row gutter={0} className='user'>
             <Col className='item'>
               <Link to='/'>
-                <span>获得收益 </span>{account ? user.balance : ''} 
+                <span>获得收益 </span>{user.balance} 
                 <Avatar 
                   size="small" 
                   style={{marginLeft: 5 }}
@@ -65,7 +52,7 @@ class User extends Component {
 }
 
 const mapState = (state) => ({
-  account: state.account,
+  user: state.user,
 });
 
 export default connect(mapState, null)(User);
