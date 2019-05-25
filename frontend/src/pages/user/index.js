@@ -16,13 +16,13 @@ class User extends Component {
   }
 
   render(){
-    const { user } = this.props;
+    const { logged, user } = this.props;
     return (
       <Card bordered={false} style={{ marginBottom: 24 }}>
         <div>
           <div className='avatar'>
             <img alt="" src='https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png' />
-            <div className='name'>{user.account}</div>
+            <div className='name'>{logged}</div>
           </div>
           <Divider dashed />
           <Row gutter={48} className='user'>

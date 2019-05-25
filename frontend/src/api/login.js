@@ -9,10 +9,13 @@ export const login = async (dispatch) => {
   try {
     await checkConnected();
     const identity = await ScatterJS.scatter.login({accounts:[network]});
-    const account = identity.accounts[0];
-    const res = await fetchOne('usertable', account.name);
-    if(res){
-      dispatch(actionCreator.changeLoginStatus(res));   
+    const account = identity.accounts[0].name;
+    if(account){
+      dispatch(actionCreator.changeLoginStatus(account));
+      const res = await fetchOne('usertable', account);
+      if(res){
+        dispatch(actionCreator.changeUserInfo(res));   
+      }
     }
   } catch (error) {
     console.error(error);
@@ -22,7 +25,8 @@ export const login = async (dispatch) => {
 export const logout = async (dispatch) => {
   try {
     await ScatterJS.scatter.logout();
-    dispatch(actionCreator.changeLoginStatus({}));
+    dispatch(actionCreator.changeLoginStatus(false));
+    dispatch(actionCreator.changeUserInfo({}));
   } catch (error) {
     console.error(error);
   }
