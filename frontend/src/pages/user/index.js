@@ -13,10 +13,8 @@ class User extends Component {
   }
 
   componentDidMount(){
-    console.log(this.props.account);
     fetchByPrimary('usertable','account',this.props.account).then(res => {
       this.setState({user: res});
-      console.log(this.state.user);
     });
   }
 
