@@ -22,7 +22,7 @@ class User extends Component {
         <div>
           <div className='avatar'>
             <img alt="" src='https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png' />
-            <div className='name'>{logged}</div>
+            <div className='name'>{logged.name}</div>
           </div>
           <Divider dashed />
           <Row gutter={48} className='user'>

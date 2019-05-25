@@ -9,10 +9,10 @@ export const login = async (dispatch) => {
   try {
     await checkConnected();
     const identity = await ScatterJS.scatter.login({accounts:[network]});
-    const account = identity.accounts[0].name;
+    const account = identity.accounts[0];
     if(account){
       dispatch(actionCreator.changeLoginStatus(account));
-      const res = await fetchOne('usertable', account);
+      const res = await fetchOne('usertable', account.name);
       if(res){
         dispatch(actionCreator.changeUserInfo(res));   
       }

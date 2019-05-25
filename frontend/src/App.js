@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
-import { login, logout, checkLogin } from './api/login';
-
 import { Layout, Button, Row, Col } from 'antd';
+
+import { login, logout, checkLogin } from './api/login';
+import { reward } from './api/service';
+
 import User from './pages/user';  
+import * as Utils from './util/Utils';
 
 import './App.css';
 
@@ -12,6 +15,25 @@ class App extends Component {
 
   componentDidMount(){
     this.props.checkLogin();
+  }
+
+  signButton(){
+    const { logged, user } = this.props;  
+    
+    if((logged.name && user.account === logged.name && !Utils.isToday(user.last_reward_time))
+      || (logged.name && user.account !== logged.name) ){ 
+
+      return (
+        <Button
+          type='danger'
+          className='sign-btn'
+          onClick={this.props.reward}
+        >
+          签到领币  
+        </Button>
+      );
+    }
+    return '';
   }
 
   render() {
@@ -25,11 +47,12 @@ class App extends Component {
             <div>微文</div>
             <Button
               type='primary'
-              style={{float:'right', marginTop:15}}
-              onClick={logged ? logout: login }
+              className='login-btn'
+              onClick={logged.name ? logout: login }
             >
-              {logged ? '注销' : '登录'}
+              {logged.name ? '注销' : '登录'}
             </Button>
+            {this.signButton()}
           </Header>
           <Content>
             <Row>
@@ -67,7 +90,10 @@ const mapDispatchToProps = (dispatch) => {
     },
     checkLogin(){
       dispatch(checkLogin);
-    },   
+    }, 
+    reward(){
+      dispatch(reward);
+    }, 
   }
 }
 

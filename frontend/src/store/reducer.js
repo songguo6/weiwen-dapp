@@ -1,8 +1,8 @@
 import * as actionTypes from './actionTypes';
 
 const defaultState = {
-  logged: false,
-  user: {}
+  logged: {},
+  user: {},
 }
 
 export default (state = defaultState, action) => {
