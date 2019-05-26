@@ -9,6 +9,7 @@
 .user .item { margin-top: 20px; }
 .user .item span { color: rgba(0, 0, 0, 0.65); }
 .login-btn {float:right; margin-top: 15px; }
-.sign-btn {float: right; margin: 15px 15px 0 0;}
+.sign-btn {float: right; margin: 15px 15px 0 0; }
+.edit-btn {float: right; margin: 15px 0 0 15px; }
 
 
