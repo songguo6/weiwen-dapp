@@ -7,7 +7,7 @@ import { login, logout, checkLogin } from './api/login';
 import { reward } from './api/service';
 
 import User from './components/User';  
-import HeaderWrapper from './components/HeaderWrapper'
+import Header from './components/Header'
 
 import './App.css';
 
@@ -24,7 +24,7 @@ class App extends Component {
     return (
       <BrowserRouter>
         <Layout>
-          <HeaderWrapper logged={logged} user={user} login={login} logout={logout}/>
+          <Header logged={logged} user={user} login={login} logout={logout}/>
           <Content>
             <Row>
               <Col lg={7} md={24}>
