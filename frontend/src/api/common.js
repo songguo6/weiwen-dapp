@@ -1,15 +1,20 @@
 import ScatterJS from 'scatterjs-core'
-import { notification } from 'antd';
+import { notification, message } from 'antd';
 import { app_name } from './config'
 
-export const notify = (message, description) => {
-  notification.success({
-    message,
-    description,
-  });
+export const msgSuccess = (msg) => {
+  message.success(msg);
 }
 
-export const notify_err = (message, description) => {
+export const msgError = (msg) => {
+  message.error(msg);
+}
+
+export const msgTx = (txid) => {
+  msgSuccess('excute success, tx_id:' + txid);
+}
+
+export const notify = (message, description) => {
   notification.error({
     message,
     description,
@@ -21,5 +26,5 @@ export const checkConnected = async () => {
     app_name,
     { initTimeout: 5000 },
   );
-  if (!connected) notify_err('没有检测到Scatter', '请安装Scatter或激活');
+  if (!connected) notify('没有检测到Scatter', '请安装Scatter或激活');
 }
