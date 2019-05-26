@@ -1,5 +1,5 @@
 import { pushAction } from './send';
-import { msgTx, notify } from './common';
+import { msgTx, notify } from '../util/Utils';
 import store from '../store';
 import { getUserInfo } from '../store/actionCreator';
 
@@ -15,3 +15,18 @@ export const reward = async (dispatch) => {
     }
   }
 };
+
+export const post = async (content, attachtype, attachment, callback) => {
+  const logged = store.getState().logged;
+  try{
+    const res = await pushAction(logged.name, logged.authority, 'post', {
+      author: logged.name,
+      content,
+      attachtype,
+      attachment,
+    });
+    callback(res);
+  }catch(error){
+    callback(error);
+  }
+}

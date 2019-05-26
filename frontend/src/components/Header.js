@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { Layout, Button, Modal, Input, Radio, Select } from 'antd';
 
 import * as Utils from '../util/Utils';
+import { post } from '../api/service';
 
 class Header extends Component {
 
@@ -12,12 +13,16 @@ class Header extends Component {
     this.handleOk = this.handleOk.bind(this);
     this.handleCancel = this.handleCancel.bind(this);
     this.onRadioChange = this.onRadioChange.bind(this);
+    this.onTextareaChange = this.onTextareaChange.bind(this);
+    this.onInputChange = this.onInputChange.bind(this);
   }
 
   state = {
     modalVisible: false,
     confirmLoading: false,
-    lableVisible: false,
+    content: '',
+    attachtype: 0,
+    attachment: '',
   };
 
   postButton(){
@@ -43,13 +48,36 @@ class Header extends Component {
   }
 
   handleOk(){
+    const { content, attachtype, attachment } = this.state;
+    if(!content){
+      Utils.msgError('内容不能为空');
+      return;
+    }
+    if(attachtype && !attachment){
+      Utils.msgError('附件不能为空');
+      return;
+    }
+
     this.setState({confirmLoading: true});
-    setTimeout(() => {
-      this.setState({
-        modalVisible: false,
-        confirmLoading: false,
-      });
-    }, 2000);
+
+    post(content, attachtype, attachment, (res) => {
+      if(res.transaction_id){
+        Utils.msgTx(res.transaction_id);
+        this.setState({
+          modalVisible: false,
+          confirmLoading: false,
+          content: '',
+          attachtype: 0,
+          attachment: '',
+        });
+      }else if(res.message){
+        Utils.notify(res.type, res.message);
+        this.setState({
+          modalVisible: false,
+          confirmLoading: false,
+        });
+      }
+    });
   };
 
   handleCancel(){
@@ -76,11 +104,19 @@ class Header extends Component {
   }
 
   onRadioChange(e){
-    this.setState({lableVisible: e.target.value});
+    this.setState({attachtype: e.target.value});
+  }
+
+  onInputChange(e){
+    this.setState({attachment: e.target.value});
+  }
+
+  onTextareaChange(e){
+    this.setState({content: e.target.value});
   }
 
   render(){
-    const { modalVisible, confirmLoading, lableVisible } = this.state;
+    const { modalVisible, confirmLoading, attachtype } = this.state;
     const { logged, login, logout } = this.props;
 
     return (
@@ -95,7 +131,10 @@ class Header extends Component {
           onOk={this.handleOk}
           onCancel={this.handleCancel}
         >
-          <Input.TextArea autosize={{ minRows: 8, maxRows: 15 }} />
+          <Input.TextArea 
+            autosize={{ minRows: 8, maxRows: 15 }}
+            onChange={this.onTextareaChange}  
+          />
           <div class='modal-label'>附件类型：</div>
           <Radio.Group name='attachtype' defaultValue={0} onChange={this.onRadioChange}>
             <Radio value={0}>无</Radio>
@@ -105,14 +144,15 @@ class Header extends Component {
             <Radio value={4}>视频</Radio>
             <Radio value={5}>其他文件</Radio>
           </Radio.Group>
-          {lableVisible ? <div class='modal-label'>附件：</div> : ''}
-          {lableVisible ?
+          {attachtype ? <div class='modal-label'>附件：</div> : ''}
+          {attachtype ?
           <Input 
             addonBefore={
               <Select defaultValue="Https://" style={{ width: 90 }}>
                 <Select.Option value="Http://">Http://</Select.Option>
                 <Select.Option value="Https://">Https://</Select.Option>
               </Select>}
+            onChange={this.onInputChange}  
           /> : ''}
         </Modal>
         {this.postButton()}
