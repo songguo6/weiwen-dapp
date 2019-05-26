@@ -18,8 +18,8 @@ class App extends Component {
   }
 
   signButton(){
-    const { logged, user } = this.props;  
-    
+    const { logged, user } = this.props;
+
     if((logged.name && user.account === logged.name && !Utils.isToday(user.last_reward_time))
       || (logged.name && user.account !== logged.name) ){ 
 

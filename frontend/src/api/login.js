@@ -2,7 +2,6 @@ import ScatterJS from 'scatterjs-core'
 import { network } from './config'
 import { checkConnected } from './common';
 
-import { fetchOne } from './fetch'; 
 import * as actionCreator from '../store/actionCreator';
 
 export const login = async (dispatch) => {
@@ -12,10 +11,7 @@ export const login = async (dispatch) => {
     const account = identity.accounts[0];
     if(account){
       dispatch(actionCreator.changeLoginStatus(account));
-      const res = await fetchOne('usertable', account.name);
-      if(res){
-        dispatch(actionCreator.changeUserInfo(res));   
-      }
+      dispatch(actionCreator.getUserInfo(account.name));
     }
   } catch (error) {
     console.error(error);
