@@ -6,7 +6,8 @@ export const fetchAll = async (table, options) => {
     code: contract,     
     scope: contract,      
     table,        
-    limit: 9999,             
+    limit: 9999,       
+    reverse: true,              
     ...options,   
   });
   return res.rows;
@@ -20,7 +21,7 @@ export const fetchOne = async (table, keyValue) => {
     table,          
     lower_bound: keyValue, 
     upper_bound: keyValue,    
-    limit: 1,                  
+    limit: 1,          
   });
   return res.rows[0];
 }

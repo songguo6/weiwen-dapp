@@ -8,6 +8,7 @@ import { reward } from './api/service';
 
 import User from './components/User';  
 import Header from './components/Header'
+import Posts from './components/Posts';
 
 import './App.css';
 
@@ -31,7 +32,7 @@ class App extends Component {
                 <User logged={logged} user={user}/>
               </Col>
               <Col lg={17} md={24}>
-
+                <Posts />
               </Col>
             </Row>          
           </Content>

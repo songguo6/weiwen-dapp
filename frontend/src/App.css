@@ -2,6 +2,7 @@
 .ant-layout-header div { float: left; color: #1da1f2; width: 200px; font-size: 28px; }
 .ant-layout-content { text-align: center; }
 .ant-layout-footer { text-align: center; }
+.ant-list-item { text-align: left; }
 .avatar { margin-bottom: 24px; text-align: center; }
 .avatar img { width: 104px; height: 104px; margin-bottom: 20px;}
 .avatar .name { margin-bottom: 4px; font-weight: 500; font-size: 20px; line-height: 28px; }
@@ -12,5 +13,9 @@
 .sign-btn { float: right; margin: 15px 15px 0 0; }
 .edit-btn { float: right; margin: 15px 0 0 15px; }
 .modal-label { margin: 23px 0 14px 0; }
+.item-content { max-width: 720px; line-height: 22px; }
+.item-attach { margin-top: 16px; line-height: 22px; }
+.item-extra { margin-top: 16px; color: rgba(0, 0, 0, 0.45); line-height:22px; }
+
 
 
