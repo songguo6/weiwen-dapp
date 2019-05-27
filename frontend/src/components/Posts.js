@@ -42,11 +42,14 @@ class Posts extends Component {
             >
               <div>
                 <div className='item-content'>{item.content}</div>
-                <div className='item-attach'>
-                  <a href={item.attachment}>
-                    <IconText type='link' text={item.attachment} />
-                  </a> 
-                </div>
+                {
+                  item.attachtype ? 
+                  <div className='item-attach'>
+                    <a href={item.attachment}>
+                      <IconText type='link' text={item.attachment} />
+                    </a> 
+                  </div> : ''
+                }
                 <div className='item-extra'>
                   <Avatar src='https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png' size="small" />
                   <Link>{item.author}</Link> 发布于 
