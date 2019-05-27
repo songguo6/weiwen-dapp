@@ -72,7 +72,7 @@ class Header extends Component {
         });
         window.location.reload();
       }else if(res.message){
-        Utils.notify(res.type, res.message);
+        Utils.msgError(res.message);
         this.setState({
           modalVisible: false,
           confirmLoading: false,

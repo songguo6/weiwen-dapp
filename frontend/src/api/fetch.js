@@ -7,7 +7,9 @@ export const fetchAll = async (table, options) => {
     scope: contract,      
     table,        
     limit: 9999,       
-    reverse: true,              
+    reverse: true, 
+    key_type: 'i64',
+    index_position: 1,             
     ...options,   
   });
   return res.rows;

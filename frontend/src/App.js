@@ -32,7 +32,7 @@ class App extends Component {
                 <User logged={logged} user={user}/>
               </Col>
               <Col lg={17} md={24}>
-                <Posts />
+                <Posts logged={logged}/>
               </Col>
             </Row>          
           </Content>

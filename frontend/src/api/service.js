@@ -1,5 +1,6 @@
+import { fetchAll } from './fetch';
 import { pushAction } from './send';
-import { msgTx, notify } from '../util/Utils';
+import { msgTx, msgError } from '../util/Utils';
 import store from '../store';
 import { getUserInfo } from '../store/actionCreator';
 
@@ -11,7 +12,7 @@ export const reward = async (dispatch) => {
       msgTx(res.transaction_id);
       dispatch(getUserInfo(logged.name));
     }catch(error){
-      notify(error.type, error.message);
+      msgError(error.message);
     }
   }
 };
@@ -29,4 +30,36 @@ export const post = async (content, attachtype, attachment, callback) => {
   }catch(error){
     callback(error);
   }
+}
+
+export const like = async (type, typeId, callback) => {
+  const logged = store.getState().logged;
+  try{
+    const res = await pushAction(logged.name, logged.authority, 'like', {
+      author: logged.name,
+      type,
+      type_id: typeId,      
+    });
+    callback(res);
+  }catch(error){
+    callback(error);
+  }
+}
+
+export const isLiked = async (type, typeId) => {
+  let isLiked = false;
+  const logged = store.getState().logged;
+  const res = await fetchAll('liketable', {
+    index_position: 3,
+    lower_bound: logged.name,
+    upper_bound: logged.name,
+  })
+  for(const k in res){
+    const item = res[k];
+    if(item.type === type && item.type_id === typeId){
+      isLiked = true;
+      break;
+    }
+  }
+  return isLiked;
 }
