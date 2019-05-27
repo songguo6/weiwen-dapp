@@ -70,6 +70,7 @@ class Header extends Component {
           attachtype: 0,
           attachment: '',
         });
+        window.location.reload();
       }else if(res.message){
         Utils.notify(res.type, res.message);
         this.setState({
@@ -135,7 +136,7 @@ class Header extends Component {
             autosize={{ minRows: 8, maxRows: 15 }}
             onChange={this.onTextareaChange}  
           />
-          <div class='modal-label'>附件类型：</div>
+          <div className='modal-label'>附件类型：</div>
           <Radio.Group name='attachtype' defaultValue={0} onChange={this.onRadioChange}>
             <Radio value={0}>无</Radio>
             <Radio value={1}>链接</Radio>
@@ -144,7 +145,7 @@ class Header extends Component {
             <Radio value={4}>视频</Radio>
             <Radio value={5}>其他文件</Radio>
           </Radio.Group>
-          {attachtype ? <div class='modal-label'>附件：</div> : ''}
+          {attachtype ? <div className='modal-label'>附件：</div> : ''}
           {attachtype ?
           <Input 
             addonBefore={
