@@ -19,13 +19,13 @@ class App extends Component {
   }
 
   render() {
-    const { logged, login, logout, user } = this.props;
+    const { logged, login, logout, user, reward } = this.props;
     const { Content, Footer } = Layout;  
 
     return (
       <BrowserRouter>
         <Layout>
-          <Header logged={logged} user={user} login={login} logout={logout}/>
+          <Header logged={logged} user={user} login={login} logout={logout} reward={reward}/>
           <Content>
             <Row>
               <Col lg={7} md={24}>

@@ -52,8 +52,8 @@ class Posts extends Component {
                 }
                 <div className='item-extra'>
                   <Avatar src='https://gw.alipayobjects.com/zos/antfincdn/XAosXuNZyF/BiazfanxmamNRoxxVxka.png' size="small" />
-                  <Link>{item.author}</Link> 发布于 
-                  <em>{moment(item.time).format('YYYY-MM-DD HH:mm:ss')}</em>
+                  <Link to='/'>{item.author}</Link> 发布于&nbsp; 
+                  <em>{moment(moment(item.time).valueOf()+8*3600000).format('YYYY-MM-DD HH:mm:ss')}</em>
                 </div>
               </div>
             </List.Item>
