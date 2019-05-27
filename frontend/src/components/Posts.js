@@ -39,8 +39,8 @@ class Posts extends Component {
     }
   }
 
-  handleComment(id){
-    console.log(id);
+  handleComment(item){
+    console.log(item.id);
   }
 
   render(){
@@ -63,7 +63,7 @@ class Posts extends Component {
               actions={[
                 <IconText type="pay-circle" text={item.balance} />,
                 <IconText type="like-o" text={item.like_num} onClick={() => {this.handleLike(1, item.id)}} />,
-                <IconText type="message" text={item.comment_num} onClick={() => {this.handleComment(item.id)}} />,
+                <IconText type="message" text={item.comment_num} onClick={() => {this.handleComment(item)}} />,
               ]}
             >
               <div>

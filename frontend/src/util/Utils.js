@@ -20,5 +20,5 @@ export const notify = (message, description) => {
 };
 
 export const isToday = (time) => {
-  return new Date(time).toDateString() === new Date().toDateString();
+  return new Date(time).toDateString() === new Date(new Date().valueOf()-8*3600000).toDateString();
 }
