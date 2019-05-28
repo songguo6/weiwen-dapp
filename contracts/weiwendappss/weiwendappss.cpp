@@ -140,7 +140,7 @@ public:
       comment.post_id = post_id;
       comment.author = author;    
       comment.time = time_point_sec(current_time_point()); 
-      comment.content = comment;
+      comment.content = content;
       comment.balance = asset(0, TOKEN_SYMBOL);
       comment.like_num = 0;
       comment.has_parent = has_parent;
