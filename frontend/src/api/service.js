@@ -63,3 +63,20 @@ export const isLiked = async (type, typeId) => {
   }
   return isLiked;
 }
+
+export const comment = async (content, postId, callback, hasParent = false, pid = 0, replyTo = '') => {
+  const logged = store.getState().logged;
+  try {
+    const res = await pushAction(logged.name, logged.authority, 'comment', {
+      author: logged.name,
+      content,
+      post_id: postId,
+      has_parent: hasParent,
+      pid,
+      reply_to: replyTo,
+    });
+    callback(res);
+  } catch (error) {
+    callback(error);
+  }
+}
