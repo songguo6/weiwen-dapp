@@ -124,7 +124,6 @@ class Posts extends Component {
           onCancel={this.handleCancel}
         >
           {currentPost.content}
-          <Divider style={{ marginTop: 20 }} />
           <List
             size='small'
             rowKey='id'
@@ -136,7 +135,6 @@ class Posts extends Component {
               </List.Item>
             )}
           />
-          <Divider style={{ marginTop: 20 }} />
           <Input.TextArea 
             autosize={{ minRows: 4, maxRows: 10 }}
             onChange={this.onTextareaChange}  
