@@ -124,11 +124,13 @@ class Posts extends Component {
           onCancel={this.handleCancel}
         >
           {currentPost.content}
+          <Divider/>
           <List
             size='small'
             rowKey='id'
             itemLayout='vertical'
             dataSource={commentList}
+            split={false}
             renderItem={item => (
               <List.Item key={item.id}>
                 {item.author + ': ' + item.content}
