@@ -130,6 +130,7 @@ class Posts extends Component {
             rowKey='id'
             itemLayout='vertical'
             dataSource={commentList}
+            style={{marginBottom: 25}}
             split={false}
             renderItem={item => (
               <List.Item key={item.id}>
