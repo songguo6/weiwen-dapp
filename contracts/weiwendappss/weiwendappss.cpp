@@ -140,6 +140,7 @@ public:
       comment.post_id = post_id;
       comment.author = author;    
       comment.time = time_point_sec(current_time_point()); 
+      comment.content = comment;
       comment.balance = asset(0, TOKEN_SYMBOL);
       comment.like_num = 0;
       comment.has_parent = has_parent;
@@ -433,6 +434,7 @@ private:
     uint64_t post_id;         //微文id
     name author;              //评论者
     time_point_sec time;      //创建时间
+    std::string content;      //评论内容
     asset balance;            //获得代币数
     uint32_t like_num;        //获得赞数
     bool has_parent;          //是否有父级评论
