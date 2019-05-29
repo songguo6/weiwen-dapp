@@ -23,7 +23,7 @@ class Header extends Component {
     content: '',
     attachtype: 0,
     attachment: '',
-  };
+  }
 
   postButton(){
     const { logged, user } = this.props;
@@ -79,11 +79,11 @@ class Header extends Component {
         });
       }
     });
-  };
+  }
 
   handleCancel(){
     this.setState({modalVisible: false});
-  };
+  }
 
   signButton(){
     const { logged, user } = this.props;

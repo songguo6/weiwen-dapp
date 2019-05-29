@@ -64,7 +64,7 @@ class Posts extends Component {
       modalVisible: false,
       currentPost: {},
     });
-  };
+  }
 
   handleOk(){
     const { logged } = this.props;
@@ -98,7 +98,7 @@ class Posts extends Component {
         });
       }
     });
-  };
+  }
 
   onTextareaChange(e){
     this.setState({commentContent: e.target.value});

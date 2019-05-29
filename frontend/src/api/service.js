@@ -15,7 +15,21 @@ export const reward = async (dispatch) => {
       msgError(error.message);
     }
   }
-};
+}
+
+export const withdraw = async (quantity) => {
+  const logged = store.getState().logged;
+  try {
+    const res = await pushAction(logged.name, logged.authority, 'withdraw', {
+      account: logged.name,
+      quantity,
+    });
+    msgTx(res.transaction_id);
+    store.dispatch(getUserInfo(logged.name));
+  } catch (error) {
+    msgError(error.message);
+  }
+} 
 
 export const post = async (content, attachtype, attachment, callback) => {
   const logged = store.getState().logged;
