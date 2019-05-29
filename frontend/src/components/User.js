@@ -53,6 +53,7 @@ class User extends Component {
     Modal.info({
       title: '充值账户二维码',
       okText: '知道了',
+      bodyStyle: {marginLeft: 0},
       content: (
         <div style={{textAlign: 'center', paddingTop: 40}}>
           <QRCode value={contract} />
