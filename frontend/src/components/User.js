@@ -81,14 +81,14 @@ class User extends Component {
       Utils.msgError('请输入提现数量，最小0.0001');
       return;
     }
-    balance = parseFloat(balance.slice(0, balance.length-4)).toFixed(4);
+    balance = parseFloat(balance.slice(0, balance.length-4));
     if(quantity > balance){
       Utils.msgError('余额不足');
       return;
     }
 
     this.setState({confirmLoading: true});
-    await withdraw(quantity.toString()+' WEI');
+    await withdraw(quantity.toFixed(4).toString()+' WEI');
     this.setState({
       modalVisible: false,
       confirmLoading: false,
