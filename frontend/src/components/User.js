@@ -92,7 +92,6 @@ class User extends Component {
     this.setState({
       modalVisible: false,
       confirmLoading: false,
-      quantity: '',
     });
   }
 
