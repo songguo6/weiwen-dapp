@@ -119,7 +119,7 @@ class User extends Component {
           onCancel={this.handleCancel}
         >
           提现数量：
-          <InputNumber min={0} step={0.0001} onChange={this.onInputChange} />
+          <InputNumber min={0} step={0.0001} onChange={this.onInputChange} style={{width: 200}}/>
           &nbsp;WEI
         </Modal>
         <div className='avatar'>
