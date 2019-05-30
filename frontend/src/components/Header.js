@@ -147,14 +147,7 @@ class Header extends Component {
           </Radio.Group>
           {attachtype ? <div className='modal-label'>附件：</div> : ''}
           {attachtype ?
-          <Input 
-            addonBefore={
-              <Select defaultValue="Https://" style={{ width: 90 }}>
-                <Select.Option value="Http://">Http://</Select.Option>
-                <Select.Option value="Https://">Https://</Select.Option>
-              </Select>}
-            onChange={this.onInputChange}  
-          /> : ''}
+          <Input onChange={this.onInputChange} /> : ''}
         </Modal>
         {this.postButton()}
         <Button
