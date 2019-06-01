@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { Layout, Button, Modal, Input, Radio, Select } from 'antd';
+import { Layout, Button, Modal, Input, Radio } from 'antd';
 
 import * as Utils from '../util/Utils';
 import { post } from '../api/service';
